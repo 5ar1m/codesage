@@ -1,0 +1,21 @@
+{
+  "name": "codesage",
+  "version": "1.0.0",
+  "description": "codebase assistant",
+  "license": "ISC",
+  "author": "sarim",
+  "type": "commonjs",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "node src/main.js",
+    "dev": "nodemon src/main.js"
+  },
+  "dependencies": {
+    "chromadb": "^3.0.6",
+    "dotenv": "^17.1.0",
+    "express": "^5.1.0",
+    "langchain": "^0.3.29",
+    "simple-git": "^3.28.0",
+    "socket.io": "^4.8.1"
+  }
+}
