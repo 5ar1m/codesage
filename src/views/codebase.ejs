@@ -12,9 +12,8 @@
         <!-- Option 2 -->
         <form id="new-codebase-form">
             <p>Select a new codebase folder:</p>
-            <input type="file" id="folderPicker" webkitdirectory directory multiple />
             <br />
-            <button type="submit">Use Selected Folder</button>
+            <button type="submit">Selected Folder</button>
         </form>
 
         <script>
@@ -23,25 +22,12 @@
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
 
-                const input = document.getElementById('folderPicker');
-                const files = input.files;
-
-                if (!files.length) {
-                    alert('Please select a folder.');
-                    return;
-                }
-
-                // Use first file's path to infer base folder (only works with Electron/native bridge)
-                const fakePath = files[0].webkitRelativePath.split('/')[0];
-
-                const res = await fetch('/api/ingest', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ path: fakePath })
+                const res = await fetch('/', {
+                    method: 'POST'
                 });
 
                 const data = await res.json();
-                alert(`Ingestion complete. Last commit: ${data.lastCommit || 'initial commit'}`);
+                document.write(data);
             });
         </script>
     </body>
