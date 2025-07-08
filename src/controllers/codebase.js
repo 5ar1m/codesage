@@ -1,11 +1,13 @@
 import fileDialog from 'node-file-dialog';
 import { ensureGitRepo } from '../utils/ensureGitRepo.js';
-import { getEmbeddableFiles } from '../utils/getEmbeddableFiles.js'
+import { getEmbeddableFiles } from '../utils/getEmbeddableFiles.js';
+import { chunkFiles } from '../utils/chunk.js';
 
 export async function addCodebase(req, res) {
     const folder = await fileDialog({ type: 'directory' });
     const path = folder[0];
     await ensureGitRepo(path);
     const embeddableFiles = await getEmbeddableFiles(path);
-    console.log(embeddableFiles);
+    const allChunks = await chunkFiles(embeddableFiles, path);
+    console.log(allChunks);
 }

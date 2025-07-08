@@ -16,13 +16,16 @@ export async function getEmbeddableFiles(projectPath) {
 
     const allFiles = await globby(['**/*'], {
         cwd: projectPath,
-        dot: false,
         onlyFiles: true,
         absolute: true,
     });
 
-    const relativePaths = allFiles.map(f => path.relative(projectPath, f));
-    const filtered = relativePaths.filter(f => !ig.ignores(f));
+    const alwaysExclude = ['package-lock.json'];
 
-    return filtered.map(f => path.join(projectPath, f));
+    const filteredFiles = allFiles.filter(absPath => {
+        const relPath = path.relative(projectPath, absPath).split(path.sep).join('/'); // POSIX path
+            return !ig.ignores(relPath) && !alwaysExclude.includes(relPath);
+    });
+
+    return filteredFiles;
 }
