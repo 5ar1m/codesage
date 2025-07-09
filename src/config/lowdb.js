@@ -13,7 +13,9 @@ export async function initDB() {
     const db = new Low(adapter, { codebases: [] });
 
     await db.read();
-    await db.write();
+    if (db.data.codebases.length === 0) {
+        await db.write();
+    }
 
     return db;
 }
