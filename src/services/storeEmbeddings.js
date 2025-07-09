@@ -16,10 +16,12 @@ export async function storeEmbeddings(embeddingList, projectPath) {
     const embeddings = embeddingList.map(c => c.embedding);
     const metadatas = embeddingList.map(c => c.metadata);
 
-    return await collection.add({
+    await collection.add({
         ids,
         documents,
         embeddings,
         metadatas
     });
+
+    return collectionName;
 }
