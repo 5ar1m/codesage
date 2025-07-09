@@ -1,6 +1,4 @@
 import 'dotenv/config';
-import AppError from './appError.js';
-import { StatusCodes } from 'http-status-codes';
 
 const HF_API_URL = 'https://router.huggingface.co/hf-inference/models/sentence-transformers/all-MiniLM-L6-v2/pipeline/feature-extraction';
 

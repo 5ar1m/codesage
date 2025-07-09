@@ -3,6 +3,7 @@ import { ensureGitRepo } from '../utils/ensureGitRepo.js';
 import { getEmbeddableFiles } from '../utils/getEmbeddableFiles.js';
 import { chunkFiles } from '../utils/chunk.js';
 import { embedChunks } from '../utils/embed.js';
+import { storeEmbeddings } from '../services/storeEmbeddings.js';
 
 export async function addCodebase(req, res) {
     const folder = await fileDialog({ type: 'directory' });
@@ -11,4 +12,5 @@ export async function addCodebase(req, res) {
     const embeddableFiles = await getEmbeddableFiles(path);
     const allChunks = await chunkFiles(embeddableFiles, path);
     const embeddingList = await embedChunks(allChunks);
+    await storeEmbeddings(embeddingList, path);
 }
