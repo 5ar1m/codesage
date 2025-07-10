@@ -1,113 +1,90 @@
-Sure — here’s a **README.md** file for your project based on what you've built so far (ChromaDB + LangChain + Hugging Face LLM + Express + EJS + Socket.io, with frontend/backend separation and RAG pipeline):
-
----
-
-````markdown
 # 🧠 CodeSage — AI Codebase Assistant
 
-**CodeSage** is an AI-powered codebase assistant that lets you chat with your project using RAG (Retrieval Augmented Generation). It uses:
-
-- **LangChain** for orchestration
-- **ChromaDB** (standalone) for vector storage
-- **Hugging Face Inference API** for LLM and embeddings
-- **Express.js** for the backend
-- **EJS + Socket.IO** for the real-time chat frontend
+CodeSage is an AI assistant for your codebase using Retrieval-Augmented Generation (RAG). It leverages LangChain, ChromaDB (standalone), and Hugging Face models to provide real-time, context-aware answers about your Node.js projects.
 
 ---
 
-## 🚀 Features
+## 📦 Features
 
-- Select a local codebase
-- Embed and store code files in ChromaDB
-- Query your codebase with natural language
-- Real-time streaming LLM responses
-- Fully local vector search (ChromaDB standalone)
-- Configurable Hugging Face models for embeddings and LLMs
+* Folder selection and project indexing
+* Embedding code files into ChromaDB
+* Git integration for commit-aware context
+* Querying the codebase via chat
+* Streaming LLM responses using Hugging Face APIs
+* EJS frontend with real-time Socket.io integration
 
 ---
 
-## 📦 Installation & Setup
+## ⚙️ Installation
 
-### 1. Clone the repo
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/codesage.git
+git clone https://github.com/5ar1m/codesage.git
 cd codesage
-````
+```
 
-### 2. Install dependencies
+### 2. Install and run ChromaDB (Standalone)
+
+In the project root:
+
+```bash
+pip install chromadb
+chromadb run
+```
+
+> Make sure Python and pip are installed on your system.
+
+### 3. Install dependencies
 
 ```bash
 npm install
 ```
 
-### 3. Setup environment variables
+### 4. Add environment variables
 
-Create a `.env` file:
+Create a `.env` file in the root:
 
-```env
-HUGGINGFACE_API_KEY=your_huggingface_api_key
+```
+HF_API_TOKEN=your_huggingface_api_key
 ```
 
-### 4. Run the app
+---
+
+## 🚀 Running the app
 
 ```bash
 npm start
 ```
 
-> The app runs on `http://localhost:3000`
-
----
-
-## 🧪 Usage
-
-1. Open the app in browser
-2. Select a folder containing a Node.js project
-3. The codebase will be scanned and embedded
-4. Ask any question about the project in chat
-5. Responses are streamed in real time
-
----
-
-## 🛠 Project Structure
+Then open your browser:
 
 ```
-.
-├── routes/                 # Express routes
-├── services/              # Vector DB, embeddings, LLM logic
-├── public/                # Static JS/CSS
-├── views/                 # EJS templates
-├── app.js                 # Express server entry
-├── .env                   # API keys and config
+http://localhost:3000
 ```
 
 ---
 
-## 🚧 Further Improvements
+## 🧠 How It Works
 
-* [ ] Add support for multi-language codebases (Python, Go, etc.)
-* [ ] Implement chat history storage
-* [ ] Add user authentication
-* [ ] Live codebase reindexing on file change (via chokidar)
-* [ ] LLM model selector and prompt tuning
-* [ ] TypeScript conversion for better dev experience
-* [ ] Drag-and-drop folder selection in frontend
+1. Select a codebase folder from the frontend.
+2. Backend scans, chunks, and embeds files using a Hugging Face embedding model.
+3. ChromaDB stores the embeddings locally.
+4. When a user enters a query, embeddings are generated and used to search for relevant context.
+5. The context is passed to a Hugging Face LLM via API, and the response is streamed back using Socket.io.
 
 ---
 
-## 💬 Feedback
+## 🔄 Future Improvements
 
-Feel free to open issues or suggestions — this is an evolving tool and feedback is welcome.
-
----
-
-## 📄 License
-
-MIT License © 2025 Sarim
-
-```
+* Multi-language support beyond Node.js
+* Summarization of files and folders
+* Persistent chat history per project
+* UI options to choose LLMs and model settings
+* Drag-and-drop UI for codebase selection
 
 ---
 
-Let me know if you'd like a version with images, badges, or a demo GIF.
-```
+## 📝 License
+
+MIT © 2025 Sarim
