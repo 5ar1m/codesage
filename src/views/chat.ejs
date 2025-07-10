@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>CodeSage Chat</title>
+    </head>
+    <body>
+        <h1>Codebase Assistant</h1>
+        <div id="chat-box" style="white-space: pre-wrap;"></div>
+
+        <form id="chat-form">
+            <input type="text" id="query-input" placeholder="Ask a question..." required />
+            <button type="submit">Send</button>
+        </form>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script>
+            const socket = io()
+            const chatForm = document.getElementById('chat-form')
+            const chatBox = document.getElementById('chat-box')
+
+            chatForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const query = document.getElementById('query-input').value;
+                const collectionName = localStorage.getItem('collectionName');
+
+                chatBox.innerHTML += `You: ${query}\n`;
+
+                const res = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ collectionName, query })
+                });
+
+                if (!res.ok) {
+                    chatBox.innerHTML += 'Error sending query.\n';
+                    return ;
+                }
+
+                document.getElementById('query-input').value = ''
+            });
+
+                // Listen for streamed LLM tokens
+            socket.on('llm-token', (token) => {
+                chatBox.innerHTML += token;
+            });
+
+            socket.on('llm-done', () => {
+                chatBox.innerHTML += '\n\n';
+            });
+        </script>
+    </body>
+</html>

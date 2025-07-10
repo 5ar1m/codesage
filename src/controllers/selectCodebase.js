@@ -11,5 +11,5 @@ export async function selectCodebase(req, res) {
     if (lastCommitId !== codebaseInfo.lastCommit) {
         await updateEmbeddings(codebaseInfo);
     }
-    return res.render('chat');
+    return res.json({ collectionName: codebaseInfo.collectionName });
 }

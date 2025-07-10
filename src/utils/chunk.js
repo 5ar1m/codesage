@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
 import path from 'path';
-import { RecursiveCharacterTextSplitter } from 'langchain/text_splitter';
+import { RecursiveCharacterTextSplitter } from '@langchain/textsplitters';
 
 export async function chunkFiles(filePaths, projectPath) {
     const splitter = new RecursiveCharacterTextSplitter({

@@ -22,7 +22,13 @@
                 });
 
                 const data = await res.json();
-                document.write(data);
+                if (data.collectionName) {
+                    localStorage.setItem('collectionName', data.collectionName);
+                    alert(`Collection "${data.collectionName}" saved!`);
+                    window.location.href = '/chat';
+                } else {
+                    alert('No collectionName received from server.');
+                }
             });
         </script>
     </body>
