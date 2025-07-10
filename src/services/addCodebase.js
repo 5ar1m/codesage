@@ -1,6 +1,6 @@
 import { db } from "../app.js";
 
-export async function addCodebaseToDB(projectPath, collectionName, lastCommit) {
+export async function addCodebase(projectPath, collectionName, lastCommit) {
     await db.read();
 
     const codebaseInfo = { projectPath, collectionName, lastCommit };

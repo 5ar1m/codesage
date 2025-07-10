@@ -1,23 +1,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>codeSage</title>
+        <title>codesage</title>
     </head>
     <body>
         <h1>Choose a Codebase</h1>
-
-        <!-- Option 1 -->
-        <button onclick="alert('Option 1 coming soon')">Use Preexisting Codebase</button>
-
-        <!-- Option 2 -->
-        <form id="new-codebase-form">
-            <p>Select a new codebase folder:</p>
+        <form id="codebase-selection-form">
+            <p>Select codebase you want codesage to assist with...</p>
             <br />
-            <button type="submit">Selected Folder</button>
+            <button type="submit">Select Folder</button>
         </form>
 
         <script>
-            const form = document.getElementById('new-codebase-form');
+            const form = document.getElementById('codebase-selection-form');
 
             form.addEventListener('submit', async (e) => {
                 e.preventDefault();
