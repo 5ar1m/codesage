@@ -9,7 +9,7 @@ export async function selectCodebase(req, res) {
     const codebaseInfo = await handleCodebase(path);
     const lastCommitId = await getLastCommitId(path);
     if (lastCommitId !== codebaseInfo.lastCommit) {
-        await updateEmbeddings(path, lastCommitId);
+        await updateEmbeddings(codebaseInfo);
     }
     return res.render('chat');
 }

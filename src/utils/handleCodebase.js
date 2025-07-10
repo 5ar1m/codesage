@@ -1,10 +1,10 @@
-import { ensureGitRepo } from '../utils/ensureGitRepo.js';
-import { getEmbeddableFiles } from '../utils/embeddableFiles.js';
-import { chunkFiles } from '../utils/chunk.js';
-import { embedChunks } from '../utils/embed.js';
+import { ensureGitRepo } from './ensureGitRepo.js';
+import { getEmbeddableFiles } from './embeddableFiles.js';
+import { chunkFiles } from './chunk.js';
+import { embedChunks } from './embed.js';
 import { storeEmbeddings } from '../services/storeEmbeddings.js';
-import { getLastCommitId } from '../utils/lastCommit.js';
-import { addCodebaseToDB } from '../services/addCodebase.js';
+import { getLastCommitId } from './lastCommit.js';
+import { addCodebase } from '../services/addCodebase.js';
 import { getCodebase } from '../services/getCodebase.js';
 
 export async function handleCodebase(projectPath) {
@@ -23,7 +23,7 @@ export async function handleCodebase(projectPath) {
     const collectionName = await storeEmbeddings(embeddingList, projectPath);
 
     const lastCommit = await getLastCommitId(projectPath);
-    const codebaseInfo = await addCodebaseToDB(projectPath, collectionName, lastCommit);
+    const codebaseInfo = await addCodebase(projectPath, collectionName, lastCommit);
 
     return codebaseInfo;
 }
