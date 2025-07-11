@@ -1,6 +1,6 @@
 # 🧠 CodeSage — AI Codebase Assistant
 
-CodeSage is an AI assistant for your codebase using Retrieval-Augmented Generation (RAG). It LangChain, ChromaDB (local-setup), and Hugging Face and Google's chat Models to provide real-time, context-aware answers about your Node.js projects.
+CodeSage is an AI assistant for your codebase using Retrieval-Augmented Generation (RAG). It utilize LangChain, ChromaDB (local), Hugging Face and Google's chat Models to provide real-time, context-aware answers about your Node.js projects.
 
 ---
 
