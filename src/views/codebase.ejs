@@ -1,22 +1,82 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>codesage</title>
-    </head>
-    <body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeSage</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+        }
+
+        p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        form {
+            background: #fff;
+            padding: 2rem 3rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        button {
+            background: #4f46e5;
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            font-size: 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #4338ca;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="fade-in">
         <h1>Choose a Codebase</h1>
         <form id="codebase-selection-form">
-            <p>Select codebase you want codesage to assist with...</p>
-            <br />
+            <p>Select the codebase you want CodeSage to assist with:</p>
             <button type="submit">Select Folder</button>
         </form>
+    </div>
 
-        <script>
-            const form = document.getElementById('codebase-selection-form');
+    <script>
+        const form = document.getElementById('codebase-selection-form');
 
-            form.addEventListener('submit', async (e) => {
-                e.preventDefault();
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
+            try {
                 const res = await fetch('/', {
                     method: 'POST'
                 });
@@ -24,12 +84,17 @@
                 const data = await res.json();
                 if (data.collectionName) {
                     localStorage.setItem('collectionName', data.collectionName);
+                    localStorage.setItem('projectPath', data.projectPath);
                     alert(`Collection "${data.collectionName}" saved!`);
                     window.location.href = '/chat';
                 } else {
                     alert('No collectionName received from server.');
                 }
-            });
-        </script>
-    </body>
+            } catch (err) {
+                alert('An error occurred while selecting the folder.');
+                console.error(err);
+            }
+        });
+    </script>
+</body>
 </html>

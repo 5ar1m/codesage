@@ -13,15 +13,14 @@ export async function handleChat(collectionName, query) {
         Authorization: `Bearer ${hfToken}`,
         'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ inputs: query, options: { wait_for_model: true } }),
+        body: JSON.stringify({ inputs: query }),
     })
 
     if (!embeddingResponse.ok) {
         throw new AppError(`Failed to embed query: ${embeddingResponse.statusText}`);
     }
 
-    const queryEmbedding = await embeddingResponse.json();
-    const embeddingVector = Array.isArray(queryEmbedding[0]) ? queryEmbedding[0] : queryEmbedding;
+    const embeddingVector = await embeddingResponse.json();
 
     const contextChunks = await getContextChunks(collectionName, embeddingVector);
     const llmResponseStream = await generateResponse(contextChunks, query);

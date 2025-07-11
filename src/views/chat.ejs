@@ -1,53 +1,172 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <title>CodeSage Chat</title>
-    </head>
-    <body>
-        <h1>Codebase Assistant</h1>
-        <div id="chat-box" style="white-space: pre-wrap;"></div>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CodeSage Chat</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
 
-        <form id="chat-form">
-            <input type="text" id="query-input" placeholder="Ask a question..." required />
-            <button type="submit">Send</button>
-        </form>
+        header {
+            background-color: #4f46e5;
+            color: white;
+            padding: 1rem 2rem;
+            text-align: center;
+            font-size: 1.5rem;
+        }
 
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
-            const socket = io()
-            const chatForm = document.getElementById('chat-form')
-            const chatBox = document.getElementById('chat-box')
+        #chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
 
-            chatForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
+        .message {
+            max-width: 80%;
+            padding: 0.75rem 1rem;
+            border-radius: 1rem;
+            font-size: 1rem;
+            line-height: 1.4;
+            animation: fadeIn 0.3s ease-in;
+            white-space: pre-wrap;
+        }
 
-                const query = document.getElementById('query-input').value;
-                const collectionName = localStorage.getItem('collectionName');
+        .user-message {
+            align-self: flex-end;
+            background-color: #4f46e5;
+            color: white;
+            border-bottom-right-radius: 0;
+        }
 
-                chatBox.innerHTML += `You: ${query}\n`;
+        .bot-message {
+            align-self: flex-start;
+            background-color: #e5e7eb;
+            color: #111827;
+            border-bottom-left-radius: 0;
+        }
 
-                const res = await fetch('/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ collectionName, query })
-                });
+        #chat-form {
+            display: flex;
+            padding: 1rem;
+            background-color: #f9fafb;
+            border-top: 1px solid #e5e7eb;
+        }
 
-                if (!res.ok) {
-                    chatBox.innerHTML += 'Error sending query.\n';
-                    return ;
-                }
+        #query-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            border: 1px solid #d1d5db;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+        }
 
-                document.getElementById('query-input').value = ''
+        button {
+            background-color: #4f46e5;
+            color: white;
+            padding: 0.75rem 1.25rem;
+            font-size: 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #4338ca;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 600px) {
+            #chat-box {
+                padding: 1rem;
+            }
+
+            .message {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>Codebase Assistant</header>
+    <div id="chat-box"></div>
+
+    <form id="chat-form">
+        <input type="text" id="query-input" placeholder="Ask a question..." required />
+        <button type="submit">Send</button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+        const chatForm = document.getElementById('chat-form');
+        const chatBox = document.getElementById('chat-box');
+        const input = document.getElementById('query-input');
+
+        let currentBotMsgElem = null;
+
+        function appendMessage(text, isUser) {
+            const msg = document.createElement('div');
+            msg.classList.add('message');
+            msg.classList.add(isUser ? 'user-message' : 'bot-message');
+            msg.textContent = text;
+            chatBox.appendChild(msg);
+            chatBox.scrollTop = chatBox.scrollHeight;
+            return msg;
+        }
+
+        chatForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const query = input.value.trim();
+            if (!query) return;
+
+            const collectionName = localStorage.getItem('collectionName');
+            const projectPath = localStorage.getItem('projectPath');
+
+            appendMessage(query, true);
+            currentBotMsgElem = appendMessage('', false);
+
+            input.value = '';
+
+            const res = await fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ collectionName, projectPath, query })
             });
 
-                // Listen for streamed LLM tokens
-            socket.on('llm-token', (token) => {
-                chatBox.innerHTML += token;
-            });
+            if (!res.ok) {
+                currentBotMsgElem.textContent = 'Error sending query.';
+            }
+        });
 
-            socket.on('llm-done', () => {
-                chatBox.innerHTML += '\n\n';
-            });
-        </script>
-    </body>
+        // Streamed LLM tokens
+        socket.on('llm-token', (token) => {
+            if (currentBotMsgElem) {
+                currentBotMsgElem.textContent += token;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        });
+
+        socket.on('llm-done', () => {
+            currentBotMsgElem = null;
+        });
+    </script>
+</body>
 </html>
