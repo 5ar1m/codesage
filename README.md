@@ -1,16 +1,16 @@
 # 🧠 CodeSage — AI Codebase Assistant
 
-CodeSage is an AI assistant for your codebase using Retrieval-Augmented Generation (RAG). It leverages LangChain, ChromaDB (standalone), and Hugging Face models to provide real-time, context-aware answers about your Node.js projects.
+CodeSage is an AI assistant for your codebase using Retrieval-Augmented Generation (RAG). It LangChain, ChromaDB (local-setup), and Hugging Face and Google's chat Models to provide real-time, context-aware answers about your Node.js projects.
 
 ---
 
 ## 📦 Features
 
 * Folder selection and project indexing
-* Embedding code files into ChromaDB
-* Git integration for commit-aware context
+* Embedding code files into ChromaDB using Hugging Face Models
+* Git integration to avoid redundant embedding updates
 * Querying the codebase via chat
-* Streaming LLM responses using Hugging Face APIs
+* Streaming responses using Google's chat Models
 * EJS frontend with real-time Socket.io integration
 
 ---
@@ -47,6 +47,7 @@ Create a `.env` file in the root:
 
 ```
 HF_API_TOKEN=your_huggingface_api_key
+GOOGLE_API_KEY=your_google_api_key
 ```
 
 ---
@@ -71,18 +72,18 @@ http://localhost:3000
 2. Backend scans, chunks, and embeds files using a Hugging Face embedding model.
 3. ChromaDB stores the embeddings locally.
 4. When a user enters a query, embeddings are generated and used to search for relevant context.
-5. The context is passed to a Hugging Face LLM via API, and the response is streamed back using Socket.io.
+5. The context is passed to a Google chat model via API, and the response is streamed back using Socket.io.
 
 ---
 
 ## 🔄 Future Improvements
 
 * Multi-language support beyond Node.js
-* Summarization of files and folders
 * Persistent chat history per project
-* UI options to choose LLMs and model settings
+* UI options to choose LLMs and model settings (you can even build a full blown extension for some IDEs like sublime text)
 * Drag-and-drop UI for codebase selection
-
+* Cache the context aware inputs with llm response to save quick bucks 😁 !
+* You can also include previous interactions for context awareness
 ---
 
 ## 📝 License
